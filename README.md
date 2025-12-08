@@ -1,349 +1,1107 @@
-# 🎬 Dokumentasi Lengkap UNEMA Cinema
+# UNEMA CINEMA - Dokumentasi Lengkap
 
-Selamat datang di dokumentasi resmi UNEMA Cinema, sebuah aplikasi pemesanan tiket bioskop modern yang dibangun menggunakan Laravel dan Livewire. Dokumen ini akan memandu Anda melalui setiap aspek proyek, mulai dari instalasi hingga detail teknis implementasi.
+## 📋 Daftar Isi
 
----
-
-## 📜 Daftar Isi
-1.  [Ringkasan Proyek](#-ringkasan-proyek)
-2.  [Fitur Utama](#-fitur-utama)
-3.  [Teknologi yang Digunakan](#-teknologi-yang-digunakan)
-4.  [Panduan Instalasi](#-panduan-instalasi)
-5.  [Konfigurasi](#-konfigurasi)
-6.  [Struktur Proyek](#-struktur-proyek)
-7.  [Skema Database](#-skema-database)
-8.  [Implementasi Livewire](#-implementasi-livewire)
-9.  [Sorotan UI/UX](#-sorotan-uiux)
-10. [Rute Aplikasi (Endpoints)](#-rute-aplikasi-endpoints)
-11. [Pengujian](#-pengujian)
-12. [Panduan Deployment](#-panduan-deployment)
-13. [Troubleshooting](#-troubleshooting)
-14. [Kontribusi & Lisensi](#-kontribusi--lisensi)
+1. [Gambaran Umum](#gambaran-umum)
+2. [Teknologi & Dependencies](#teknologi--dependencies)
+3. [Struktur Folder](#struktur-folder)
+4. [Database Schema](#database-schema)
+5. [API Routes & Endpoints](#api-routes--endpoints)
+6. [Controllers](#controllers)
+7. [Models](#models)
+8. [Views & UI](#views--ui)
+9. [Services](#services)
+10. [Workflow & User Flow](#workflow--user-flow)
+11. [Setup & Instalasi](#setup--instalasi)
+12. [Troubleshooting](#troubleshooting)
 
 ---
 
-## 1.  Ringkasan Proyek
+## 📱 Gambaran Umum
 
-UNEMA Cinema adalah aplikasi web canggih yang dirancang untuk menyederhanakan proses pemesanan tiket bioskop. Aplikasi ini menawarkan antarmuka yang intuitif bagi pengguna untuk menelusuri film, melihat jadwal, memilih kursi, dan melakukan pembayaran dengan aman. Di sisi lain, admin memiliki dasbor yang kuat untuk mengelola seluruh aspek operasional bioskop secara digital.
+**UNEMA CINEMA** adalah web application untuk pemesanan tiket bioskop online dengan fitur:
 
-![UNEMA Cinema](https://img.shields.io/badge/UNEMA-Cinema-blue?style=for-the-badge)
-![Laravel](https://img.shields.io/badge/Laravel-11-red?style=for-the-badge)
-![Livewire](https://img.shields.io/badge/Livewire-3-green?style=for-the-badge)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3-purple?style=for-the-badge)
+-   ✅ Browse film dengan filter genre
+-   ✅ Pilih jadwal tayang & kursi
+-   ✅ Checkout dengan payment gateway Midtrans
+-   ✅ Manajemen tiket & pembatalan
+-   ✅ Admin dashboard untuk mengelola film, jadwal, user
+-   ✅ Real-time seat availability tracking
+-   ✅ Sistem authentikasi & autorisasi
 
----
-
-## 2. Fitur Utama
-
-### 🎫 Untuk Pengguna
-- **Autentikasi Aman**: Proses login dan registrasi yang aman dengan desain antarmuka bertema tiket bioskop.
-- **Penjelajahan Film**: Mencari, memfilter (berdasarkan genre & status), dan mengurutkan film dengan pembaruan *real-time*.
-- **Jadwal Tayang Interaktif**: Melihat jadwal tayang yang tersedia dengan filter berdasarkan tanggal dan film.
-- **Pemesanan Tiket Mudah**: Proses pemilihan kursi yang interaktif dan alur checkout yang lancar.
-- **Pembayaran Aman**: Terintegrasi dengan Midtrans sebagai *payment gateway* terpercaya.
-- **Manajemen Tiket**: Melihat riwayat tiket dan melakukan pembatalan tiket yang telah dipesan.
-- **Pengaturan Profil**: Mengelola informasi pribadi dan mengubah kata sandi dengan mudah.
-
-### 👨‍💼 Untuk Admin
-- **Dasbor Analitik**: Statistik lengkap mengenai film, jadwal, pemesanan, pengguna, dan total pendapatan.
-- **Manajemen Film (CRUD)**: Kemampuan untuk menambah, mengedit, dan menghapus data film.
-- **Manajemen Jadwal**: Mengelola jadwal tayang untuk setiap film dan studio.
-- **Manajemen Pemesanan**: Memantau dan mengelola status semua pemesanan yang masuk.
-- **Manajemen Pengguna**: Mengelola data pengguna yang terdaftar di sistem.
+**Stack Teknologi:** Laravel 11 + Livewire 3 + Bootstrap 5 + Midtrans Payment
 
 ---
 
-## 3. Teknologi yang Digunakan
+## 🛠️ Teknologi & Dependencies
 
-| Kategori      | Teknologi                                           |
-|---------------|-----------------------------------------------------|
-| **Backend**   | Laravel 11, Livewire 3                              |
-| **Frontend**  | Bootstrap 5.3, Vanilla JS, Bootstrap Icons          |
-| **Database**  | MySQL                                               |
-| **Pembayaran**| Midtrans Payment Gateway                            |
-| **Styling**   | CSS3, Google Fonts (Poppins, Bebas Neue)            |
+### Backend
 
----
+| Paket             | Versi   | Fungsi                      |
+| ----------------- | ------- | --------------------------- |
+| Laravel Framework | ^12.0   | Web framework utama         |
+| Livewire          | ^3.6    | Reactive UI components      |
+| Midtrans          | \*      | Payment gateway integration |
+| Guzzle HTTP       | ^7.10   | HTTP client                 |
+| Laravel Tinker    | ^2.10.1 | REPL untuk debugging        |
 
-## 4. Panduan Instalasi
+### Frontend
 
-Ikuti langkah-langkah berikut untuk menjalankan proyek secara lokal.
+| Library     | Fungsi                |
+| ----------- | --------------------- |
+| Bootstrap 5 | UI Framework          |
+| SweetAlert2 | Modal & alert dialogs |
+| Alpine.js   | Reactive components   |
+| Vite        | Asset bundler         |
 
-**Prasyarat:**
-- PHP 8.2+
-- Composer
-- MySQL 8.0+
-- Node.js & NPM (opsional, untuk manajemen aset frontend)
+### Development
 
-**Langkah-langkah Instalasi:**
-
-1.  **Clone Repository**
-    ```bash
-    git clone <url-repository-anda>
-    cd unema-laravel
-    ```
-
-2.  **Install Dependencies**
-    ```bash
-    composer install
-    npm install
-    ```
-
-3.  **Setup Environment**
-    Salin file `.env.example` menjadi `.env` dan generate kunci aplikasi.
-    ```bash
-    cp .env.example .env
-    php artisan key:generate
-    ```
-
-4.  **Konfigurasi Database**
-    Buka file `.env` dan sesuaikan konfigurasi database Anda.
-    ```env
-    DB_CONNECTION=mysql
-    DB_HOST=127.0.0.1
-    DB_PORT=3306
-    DB_DATABASE=unema
-    DB_USERNAME=root
-    DB_PASSWORD=
-    ```
-
-5.  **Jalankan Migrasi & Seeding**
-    Buat struktur tabel dan isi dengan data awal (opsional).
-    ```bash
-    php artisan migrate
-    php artisan db:seed
-    ```
-
-6.  **Jalankan Server**
-    ```bash
-    php artisan serve
-    ```
-
-7.  **Akses Aplikasi**
-    Buka browser dan kunjungi `http://localhost:8000`.
+| Tool         | Fungsi              |
+| ------------ | ------------------- |
+| PHPUnit      | Unit testing        |
+| Laravel Pint | Code style fixer    |
+| Laravel Pail | Log viewer          |
+| Faker        | Generate dummy data |
 
 ---
 
-## 5. Konfigurasi
-
-### Midtrans Payment Gateway
-Dapatkan API keys dari dasbor Midtrans Anda dan tambahkan ke file `.env`.
-```env
-MIDTRANS_SERVER_KEY=your_server_key
-MIDTRANS_CLIENT_KEY=your_client_key
-MIDTRANS_IS_PRODUCTION=false
-```
-
-### Konfigurasi Email (Opsional)
-Untuk fitur seperti notifikasi email, konfigurasikan kredensial SMTP Anda di `.env`.
-```env
-MAIL_MAILER=smtp
-MAIL_HOST=smtp.mailtrap.io
-MAIL_PORT=465
-MAIL_USERNAME=your_username
-MAIL_PASSWORD=your_password
-MAIL_ENCRYPTION=tls
-MAIL_FROM_ADDRESS="hello@example.com"
-MAIL_FROM_NAME="${APP_NAME}"
-```
-
----
-
-## 6. Struktur Proyek
-
-Struktur direktori utama yang perlu diperhatikan:
+## 📁 Struktur Folder
 
 ```
 unema-laravel/
 ├── app/
-│   ├── Http/Controllers/      # Logic untuk handle request HTTP
-│   ├── Livewire/              # Komponen interaktif Livewire
-│   ├── Models/                # Representasi tabel database (Eloquent)
-│   └── Services/              # Logic bisnis (contoh: MidtransService)
+│   ├── Http/
+│   │   ├── Controllers/          # Business logic handlers
+│   │   │   ├── AdminController.php
+│   │   │   ├── AdminMovieController.php
+│   │   │   ├── AdminShowtimeController.php
+│   │   │   ├── AdminUserController.php
+│   │   │   ├── AdminBookingController.php
+│   │   │   ├── AuthController.php
+│   │   │   ├── BookingController.php
+│   │   │   ├── MovieController.php
+│   │   │   ├── ShowtimeController.php
+│   │   │   ├── TicketController.php
+│   │   │   ├── SettingsController.php
+│   │   │   └── Controller.php      # Base controller
+│   │   └── Middleware/            # Route protection
+│   ├── Models/                    # Database models
+│   │   ├── User.php
+│   │   ├── Movie.php
+│   │   ├── Showtime.php
+│   │   ├── Booking.php
+│   │   └── Review.php
+│   ├── Livewire/                  # Reactive components
+│   │   ├── TicketsList.php
+│   │   └── MovieSearch.php
+│   └── Services/                  # Business logic layer
+│       └── MidtransService.php
+├── config/
+│   ├── app.php                    # App configuration
+│   ├── database.php               # Database settings
+│   └── services.php               # Service config (Midtrans)
+├── database/
+│   ├── migrations/                # Schema definitions
+│   ├── factories/                 # Fake data generators
+│   └── seeders/                   # Initial data
 ├── resources/
 │   ├── views/
-│   │   ├── auth/              # Halaman Login & Register
-│   │   ├── admin/             # Halaman khusus Admin
-│   │   ├── livewire/          # Tampilan untuk komponen Livewire
-│   │   └── ...                # Halaman lainnya (movies, tickets, dll)
-│   ├── css/                   # File CSS
-│   └── js/                    # File JavaScript
-├── database/
-│   ├── migrations/            # Skema struktur database
-│   └── seeders/               # Data awal untuk database
+│   │   ├── layouts/
+│   │   │   ├── app.blade.php     # Main layout
+│   │   │   └── guest.blade.php   # Guest layout
+│   │   ├── auth/                  # Login & register pages
+│   │   ├── movies/                # Movie listing & detail
+│   │   ├── bookings/              # Booking workflow
+│   │   ├── tickets/               # Ticket management
+│   │   ├── admin/                 # Admin dashboard
+│   │   └── components/            # Reusable components
+│   ├── js/                        # JavaScript assets
+│   ├── css/                       # Stylesheets
+│   └── images/                    # Image assets
+├── routes/
+│   ├── web.php                    # Web routes
+│   └── console.php                # Console commands
+├── storage/
+│   └── app/
+│       └── public/                # File uploads
 ├── public/
-│   ├── css/auth.css           # Styling khusus halaman autentikasi
-│   └── js/auth.js             # Script khusus halaman autentikasi
-└── routes/
-    └── web.php                # Definisi semua rute web
+│   ├── css/                       # Compiled CSS
+│   ├── js/                        # Compiled JS
+│   └── images/                    # Public images
+├── tests/                         # Unit & feature tests
+├── .env                           # Environment config
+├── .env.example                   # Example env file
+├── composer.json                  # PHP dependencies
+├── package.json                   # Node dependencies
+└── artisan                        # CLI tool
 ```
 
 ---
 
-## 7. Skema Database
+## 🗄️ Database Schema
 
-Aplikasi ini menggunakan 5 tabel utama:
+### Users Table
 
-1.  **users**: Menyimpan data pengguna dan admin.
-    - `id`, `username`, `email`, `password`, `full_name`, `phone`, `is_admin`
+```sql
+CREATE TABLE users (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) UNIQUE NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    role ENUM('user', 'admin') DEFAULT 'user',
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
 
-2.  **movies**: Menyimpan semua informasi terkait film.
-    - `id`, `title`, `description`, `poster_url`, `trailer_url`, `duration`, `rating`, `release_date`, `genre`, `status`
+### Movies Table
 
-3.  **showtimes**: Menyimpan jadwal tayang untuk setiap film.
-    - `id`, `movie_id`, `show_date`, `show_time`, `studio`, `price`, `available_seats`, `total_seats`
+```sql
+CREATE TABLE movies (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    description LONGTEXT,
+    poster_url VARCHAR(255),
+    trailer_url VARCHAR(255),
+    duration INT (minutes),
+    rating DECIMAL(2, 1) (e.g., 8.5),
+    release_date DATE,
+    genre VARCHAR(100),
+    status ENUM('showing', 'coming_soon', 'ended') DEFAULT 'showing',
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
 
-4.  **bookings**: Menyimpan data transaksi pemesanan tiket.
-    - `id`, `user_id`, `showtime_id`, `seats`, `total_price`, `booking_code`, `status`
+### Showtimes Table
 
-5.  **reviews**: Menyimpan ulasan dan rating dari pengguna untuk film.
-    - `id`, `movie_id`, `user_id`, `rating`, `comment`
+```sql
+CREATE TABLE showtimes (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    movie_id BIGINT FOREIGN KEY,
+    studio VARCHAR(50),
+    show_date DATE,
+    show_time TIME,
+    price DECIMAL(10, 2),
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
 
----
+### Bookings Table
 
-## 8. Implementasi Livewire
+```sql
+CREATE TABLE bookings (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT FOREIGN KEY,
+    showtime_id BIGINT FOREIGN KEY,
+    seats VARCHAR(255) (comma-separated, e.g., "A1,A2,B3"),
+    total_price DECIMAL(10, 2),
+    booking_code VARCHAR(50) UNIQUE,
+    status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
 
-Livewire adalah teknologi kunci yang membuat antarmuka UNEMA Cinema terasa cepat dan dinamis tanpa perlu me-refresh halaman.
+### Reviews Table
 
-### Komponen Utama Livewire:
+```sql
+CREATE TABLE reviews (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT FOREIGN KEY,
+    movie_id BIGINT FOREIGN KEY,
+    rating INT (1-5),
+    comment TEXT,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+```
 
-1.  **MoviesList (`movies-list`)**
-    - **Fungsi**: Mengelola tampilan daftar film di halaman utama.
-    - **Fitur**: Pencarian *real-time*, filter genre & status, serta pengurutan.
+**Relationships:**
 
-2.  **ShowtimesList (`showtimes-list`)**
-    - **Fungsi**: Menampilkan daftar jadwal tayang yang tersedia.
-    - **Fitur**: Filter berdasarkan film dan tanggal.
-
-3.  **TicketsList (`tickets-list`)**
-    - **Fungsi**: Menampilkan daftar tiket yang dimiliki pengguna.
-    - **Fitur**: Pencarian *real-time*, filter status tiket, dan fungsi pembatalan tiket.
-
-### Keuntungan Penggunaan Livewire:
-- **Interaktivitas Tinggi**: Filter, pencarian, dan paginasi terasa instan.
-- **UX yang Lebih Baik**: Pengguna mendapatkan umpan balik visual (loading states) saat data diproses.
-- **Kode Terpusat**: Logika frontend dan backend berada dalam satu komponen yang sama, menyederhanakan pengembangan.
-
----
-
-## 9. Sorotan UI/UX
-
-### Halaman Login & Register
-- **Desain Tiket Bioskop**: Antarmuka yang unik dan tematik.
-- **Animasi Tirai**: Efek tirai terbuka saat halaman dimuat.
-- **Efek Spotlight**: Animasi lampu sorot yang bergerak dinamis.
-- **Video Latar**: Latar belakang video yang sinematik.
-
-### Aplikasi Utama
-- **Tema Gelap (Dark Mode)**: Tampilan modern yang nyaman di mata.
-- **Navigasi Sidebar**: Akses mudah ke semua fitur utama.
-- **Desain Responsif**: Tampilan optimal di berbagai perangkat (desktop, tablet, mobile).
-- **Komponen Interaktif**: Penggunaan modal, notifikasi, dan *badge* yang informatif.
-
----
-
-## 10. Rute Aplikasi (Endpoints)
-
-### Rute Publik
-- `GET /`: Halaman utama (Daftar Film)
-- `GET /movies/{id}`: Halaman detail film
-- `GET /showtimes`: Halaman daftar jadwal tayang
-- `GET /login`: Halaman login
-- `GET /register`: Halaman registrasi
-
-### Rute Terproteksi (Memerlukan Login)
-- `GET /settings`: Halaman pengaturan akun
-- `PUT /settings`: Aksi untuk memperbarui profil
-- `GET /select-seats/{showtimeId}`: Halaman pemilihan kursi
-- `POST /checkout`: Aksi untuk memproses checkout
-- `GET /tickets`: Halaman "Tiket Saya"
-- `POST /tickets/cancel`: Aksi untuk membatalkan tiket
-
-### Rute Admin (Memerlukan Login & Status Admin)
-- `GET /admin`: Dasbor admin
-- `GET /admin/movies`: Manajemen film
-- `GET /admin/showtimes`: Manajemen jadwal
-- `GET /admin/bookings`: Manajemen pemesanan
-- `GET /admin/users`: Manajemen pengguna
-
----
-
-## 11. Pengujian
-
-### Akun untuk Pengujian
-- **User Biasa**:
-  - Email: `user@example.com`
-  - Password: `password`
-- **Admin**:
-  - Email: `admin@example.com`
-  - Password: `password`
-
-### Pengujian Pembayaran (Midtrans Sandbox)
-Gunakan detail kartu kredit uji berikut saat checkout:
-- **Nomor Kartu**: `4811 1111 1111 1114`
-- **Tanggal Kedaluwarsa**: `12/25`
-- **CVV**: `123`
+```
+User ──1:N── Booking
+User ──1:N── Review
+Movie ──1:N── Showtime
+Movie ──1:N── Review
+Showtime ──1:N── Booking
+```
 
 ---
 
-## 12. Panduan Deployment
+## 🔌 API Routes & Endpoints
 
-Sebelum melakukan deployment ke server produksi, jalankan langkah-langkah berikut untuk optimasi:
+### Public Routes
 
-1.  **Optimasi Konfigurasi**
-    ```bash
-    php artisan config:cache
-    php artisan route:cache
-    php artisan view:cache
-    ```
+#### Movies
 
-2.  **Atur Environment Produksi**
-    Pastikan variabel berikut diatur dengan benar di file `.env` server Anda.
-    ```env
-    APP_ENV=production
-    APP_DEBUG=false
-    MIDTRANS_IS_PRODUCTION=true
-    ```
+```
+GET /                              → Show semua film dengan filter
+GET /movies/{id}                   → Detail film + reviews
+GET /showtimes                     → List jadwal tayang
+GET /showtimes/{movieId}           → Jadwal untuk film tertentu (AJAX)
+```
 
-3.  **Jalankan Migrasi**
-    ```bash
-    php artisan migrate --force
-    ```
+### Authentication Routes
 
-4.  **Kompilasi Aset Frontend**
-    ```bash
-    npm run build
-    ```
+```
+GET /login                         → Show login form
+POST /login                        → Process login
+GET /register                      → Show register form
+POST /register                     → Process register
+POST /logout                       → Logout user
+```
 
-5.  **Atur Hak Akses Folder**
-    Pastikan web server memiliki izin tulis ke direktori `storage` dan `bootstrap/cache`.
-    ```bash
-    chmod -R 775 storage bootstrap/cache
-    ```
+### Protected Routes (Auth Required)
+
+#### Booking Workflow
+
+```
+GET /select-seats/{showtimeId}     → Halaman pilih kursi
+POST /checkout                     → Create booking & show checkout page
+POST /process-payment              → Generate Midtrans snap token
+POST /booking/confirm-payment      → Client-side payment confirmation
+GET /booking-success?booking_id=X  → Show payment result
+GET /booking/{bookingId}/status    → Check booking status (JSON)
+```
+
+#### Tickets & Bookings
+
+```
+GET /tickets                       → List tiket user (dengan status filter)
+POST /tickets/cancel               → Cancel tiket user
+```
+
+#### Settings
+
+```
+GET /settings                      → User profile & preferences
+PUT /settings                      → Update profile
+```
+
+### Admin Routes (Auth + Admin Role Required)
+
+#### Dashboard
+
+```
+GET /admin                         → Admin dashboard dengan statistik
+```
+
+#### Movie Management
+
+```
+POST /admin/movies                 → Create film (Livewire modal)
+PUT /admin/movies/{movie}          → Update film
+DELETE /admin/movies/{movie}       → Delete film
+```
+
+#### Showtime Management
+
+```
+POST /admin/showtimes              → Create jadwal
+PUT /admin/showtimes/{showtime}    → Update jadwal
+DELETE /admin/showtimes/{showtime} → Delete jadwal
+```
+
+#### User Management
+
+```
+POST /admin/users                  → Create user
+PUT /admin/users/{user}            → Update user
+DELETE /admin/users/{user}         → Delete user
+```
+
+#### Booking Management
+
+```
+GET /admin/bookings/{booking}      → Detail booking
+POST /admin/bookings/{booking}/approve  → Approve booking
+POST /admin/bookings/{booking}/cancel   → Cancel booking
+DELETE /admin/bookings/{booking}   → Delete booking
+```
+
+### Public Webhooks
+
+```
+POST /payment-callback             → Midtrans webhook (IPN)
+```
 
 ---
 
-## 13. Troubleshooting
+## 🎮 Controllers
 
-| Masalah                               | Solusi                                                              |
-|---------------------------------------|---------------------------------------------------------------------|
-| **Livewire tidak berfungsi**          | Jalankan `php artisan cache:clear` dan `php artisan config:clear`. Pastikan `@livewireStyles` dan `@livewireScripts` ada di layout utama. |
-| **Error Database / "Class not found"**| Jalankan `composer dump-autoload` dan `php artisan migrate:fresh --seed`. |
-| **Pembayaran gagal**                  | Verifikasi kembali kredensial Midtrans di `.env`. Pastikan mode sandbox/produksi sudah sesuai. |
-| **Aset (CSS/JS) tidak termuat**       | Pastikan path aset benar dan jalankan `npm run build` jika perlu.      |
+### AuthController
 
----
+**Fungsi:** Handle authentication
 
-## 14. Kontribusi & Lisensi
+-   `showLogin()` - Tampil form login
+-   `login(Request)` - Process login dengan validasi
+-   `showRegister()` - Tampil form register
+-   `register(Request)` - Create user baru
+-   `logout(Request)` - Logout & redirect
 
-### Kontribusi
-Kontribusi untuk pengembangan proyek ini sangat diterima. Silakan buat *fork* dari repositori, buat *feature branch*, dan ajukan *Pull Request*.
-
-### Lisensi
-Proyek UNEMA Cinema dilisensikan di bawah **MIT License**. Ini berarti Anda bebas untuk menggunakan, memodifikasi, dan mendistribusikan kode ini untuk tujuan apa pun.
+**Middleware:** Tanpa auth (public)
 
 ---
 
-**Terima kasih telah menggunakan UNEMA Cinema! Selamat menonton! 🎬🍿**
+### MovieController
 
-*Versi: 1.0.0 | Terakhir Diperbarui: 2025*
+**Fungsi:** Display film untuk user
+
+-   `index(Request)` - List film dengan filter genre & search
+-   `show($id)` - Detail film + reviews + jadwal tayang
+
+**Key Features:**
+
+-   Filter berdasarkan genre dari request
+-   Pagination untuk performa
+-   Include relationships (reviews, showtimes)
+
+**Middleware:** Tanpa auth (public)
+
+---
+
+### ShowtimeController
+
+**Fungsi:** Manage jadwal tayang
+
+-   `index(Request)` - List jadwal dengan filter
+-   `getShowtimes($movieId)` - AJAX endpoint untuk jadwal film tertentu
+
+**Key Features:**
+
+-   Filter berdasarkan tanggal, film, studio
+-   Return JSON untuk AJAX
+-   Include movie data
+
+**Middleware:** Tanpa auth (public)
+
+---
+
+### BookingController
+
+**Fungsi:** Handle booking workflow & payment
+
+**Methods:**
+
+1. `selectSeats($showtimeId)`
+
+    - Load halaman pilih kursi
+    - Pass booked seats array ke view
+    - **Bug:** No validation; race condition possible
+
+2. `checkout(Request)`
+
+    - Validasi input (showtime_id, seats)
+    - Check kursi tersedia
+    - Create booking dengan status 'pending'
+    - **Bug:** Race condition between check & create (2 users bisa book kursi sama)
+
+3. `processPayment(Request)`
+
+    - Generate Midtrans snap token
+    - Return JSON untuk Snap pop-up
+
+4. `paymentCallback(Request)`
+
+    - Webhook dari Midtrans
+    - Verify signature
+    - Update booking status ke 'confirmed' jika payment success
+    - **Enhancement:** Added logging untuk debug
+
+5. `success(Request)`
+
+    - Show halaman status pembayaran
+    - Polling untuk check status real-time
+    - **Enhancement:** 3-second delay + 60 attempts (2 minute timeout)
+
+6. `checkStatus($bookingId)`
+
+    - Endpoint untuk polling status
+    - Return JSON: `{ status: 'pending|confirmed|cancelled' }`
+
+7. `confirmPayment(Request)`
+    - Client-side fallback jika callback lambat
+    - Update booking status ke 'confirmed' manual
+    - Verify user ownership
+
+**Middleware:** Auth required
+
+---
+
+### TicketController
+
+**Fungsi:** Manage tiket user
+
+**Methods:**
+
+1. `index()`
+
+    - List tiket user dengan Livewire component
+    - Filter berdasarkan status
+
+2. `cancel(Request)`
+    - Cancel tiket user
+    - Verify ownership
+    - Update status ke 'cancelled'
+
+**Middleware:** Auth required
+
+---
+
+### AdminController
+
+**Fungsi:** Admin dashboard
+
+**Methods:**
+
+1. `dashboard(Request)`
+    - Show statistik: total booking, pending, confirmed, cancelled
+    - List recent bookings
+    - Monthly revenue chart
+    - Livewire modals untuk CRUD
+
+**Middleware:** Auth + admin role
+
+---
+
+### AdminMovieController
+
+**Fungsi:** CRUD film
+
+**Methods:**
+
+1. `store(Request)` - Create film dengan upload poster
+2. `update(Request, Movie)` - Update film
+3. `destroy(Movie)` - Delete film
+
+**Validasi:**
+
+-   Title, description required
+-   Poster upload (image validation)
+-   Duration harus integer
+-   Rating 1-10
+
+**Middleware:** Auth + admin role
+
+---
+
+### AdminShowtimeController
+
+**Fungsi:** CRUD jadwal tayang
+
+**Methods:**
+
+1. `store(Request)` - Create showtime
+2. `update(Request, Showtime)` - Update showtime
+3. `destroy(Showtime)` - Delete showtime
+
+**Validasi:**
+
+-   Movie harus exist
+-   Show date & time required
+-   Price harus numeric > 0
+
+**Middleware:** Auth + admin role
+
+---
+
+### AdminUserController
+
+**Fungsi:** CRUD user
+
+**Methods:**
+
+1. `store(Request)` - Create user
+2. `update(Request, User)` - Update user
+3. `destroy(User)` - Delete user
+
+**Validasi:**
+
+-   Email unique
+-   Password min 8 char (if provided)
+-   Role harus 'user' atau 'admin'
+
+**Middleware:** Auth + admin role
+
+---
+
+### AdminBookingController
+
+**Fungsi:** Manage booking
+
+**Methods:**
+
+1. `show(Booking)` - Detail booking
+2. `approve(Booking)` - Approve pending booking
+3. `cancel(Booking)` - Cancel booking
+4. `destroy(Booking)` - Delete booking
+
+**Middleware:** Auth + admin role
+
+---
+
+### SettingsController
+
+**Fungsi:** User profile settings
+
+**Methods:**
+
+1. `index()` - Show settings page
+2. `update(Request)` - Update user data
+
+**Middleware:** Auth required
+
+---
+
+## 💾 Models
+
+### User Model
+
+```php
+protected $fillable = ['name', 'email', 'password', 'phone', 'role'];
+
+// Relationships
+hasMany('Booking')
+hasMany('Review')
+
+// Methods
+isAdmin() → Check role = 'admin'
+```
+
+### Movie Model
+
+```php
+protected $fillable = ['title', 'description', 'poster_url', 'trailer_url',
+                       'duration', 'rating', 'release_date', 'genre', 'status'];
+
+// Relationships
+hasMany('Showtime')
+hasMany('Review')
+```
+
+### Showtime Model
+
+```php
+protected $fillable = ['movie_id', 'studio', 'show_date', 'show_time', 'price'];
+protected $dates = ['show_date'];
+
+// Relationships
+belongsTo('Movie')
+hasMany('Booking')
+```
+
+### Booking Model
+
+```php
+protected $fillable = ['user_id', 'showtime_id', 'seats', 'total_price',
+                       'booking_code', 'status'];
+
+// Relationships
+belongsTo('User')
+belongsTo('Showtime')
+
+// Methods
+getSeatsArray() → explode(',', $this->seats) → ['A1', 'A2', ...]
+```
+
+### Review Model
+
+```php
+protected $fillable = ['user_id', 'movie_id', 'rating', 'comment'];
+
+// Relationships
+belongsTo('User')
+belongsTo('Movie')
+```
+
+---
+
+## 🎨 Views & UI
+
+### Layouts
+
+-   `layouts/app.blade.php` - Main layout dengan navbar & footer
+-   `layouts/guest.blade.php` - Guest layout (login/register)
+
+### Pages
+
+#### Public Pages
+
+-   `movies/index.blade.php` - List semua film dengan filter & search
+-   `movies/show.blade.php` - Detail film + trailer + reviews
+-   `showtimes/index.blade.php` - List jadwal tayang dengan filter
+
+#### Auth Pages
+
+-   `auth/login.blade.php` - Login form
+-   `auth/register.blade.php` - Register form
+
+#### Booking Workflow
+
+-   `bookings/select-seats.blade.php`
+
+    -   Grid seat 8x10 (rows A-H, cols 1-10)
+    -   Show booked seats (disabled)
+    -   Calculate total price
+    -   Submit form ke checkout
+    -   **Bug:** No AJAX validation, seats bisa berubah saat user select
+
+-   `bookings/checkout.blade.php`
+
+    -   Show booking detail (film, kursi, tanggal, harga)
+    -   Midtrans payment button
+    -   Payment success/pending/error handling
+
+-   `bookings/success.blade.php`
+    -   Show payment result (success/pending/error)
+    -   Polling untuk check status real-time (3s delay, 60 attempts)
+    -   Show booking code & ticket detail jika confirmed
+
+#### Ticket Pages
+
+-   `tickets/index.blade.php`
+    -   List tiket user dengan status badge
+    -   Livewire component untuk filter & cancel
+    -   Show booking code & kursi
+
+#### Admin Pages
+
+-   `admin/dashboard.blade.php`
+
+    -   Statistik: total booking, revenue, trends
+    -   Recent bookings table
+    -   Livewire modals untuk CRUD film/jadwal/user
+    -   Charts & graphs
+
+-   `admin/movies/index.blade.php` - Modal untuk CRUD film
+-   `admin/showtimes/index.blade.php` - Modal untuk CRUD jadwal
+-   `admin/users/index.blade.php` - Modal untuk CRUD user
+
+#### Settings
+
+-   `settings/index.blade.php` - User profile & preferences form
+
+### Components
+
+-   `components/navbar.blade.php` - Navigation bar
+-   `components/footer.blade.php` - Footer
+-   `components/seat-grid.blade.php` - Reusable seat grid
+-   `components/movie-card.blade.php` - Movie card untuk list
+
+### Livewire Components
+
+-   `Livewire/TicketsList.php`
+    -   List tiket dengan status filter
+    -   Search by movie
+    -   Cancel tiket functionality
+    -   Real-time updates
+
+---
+
+## ⚙️ Services
+
+### MidtransService
+
+**Fungsi:** Integration dengan Midtrans payment gateway
+
+**Methods:**
+
+```php
+createTransaction(Booking $booking)
+    → Generate snap token untuk payment pop-up
+
+handleNotification(array $notification)
+    → Process webhook dari Midtrans
+    → Verify signature
+    → Update booking status
+
+verifySignature(string $orderId, string $statusCode, int $grossAmount, string $serverKey)
+    → Verify webhook authenticity
+```
+
+**Config:**
+
+-   Server Key & Client Key dari `.env` (Midtrans sandbox)
+-   Transaction items: movie title, seat, price
+-   Customer data: user name, email, phone
+
+**Status Flow:**
+
+```
+settlement/capture → booking.status = 'confirmed'
+pending → booking.status = 'pending'
+deny/cancel/expire → booking.status = 'cancelled'
+```
+
+---
+
+## 🔄 Workflow & User Flow
+
+### 1️⃣ User Registration & Login
+
+```
+Register Form → Validate email/password → Create User → Redirect to Login
+        ↓
+Login Form → Verify credentials → Create session → Redirect to Home
+```
+
+### 2️⃣ Browse & Select Film
+
+```
+Home (Movie List) → Filter by Genre → Click Film
+        ↓
+Detail Page (Reviews + Showtimes) → Select Showtime
+        ↓
+Redirect to Select Seats
+```
+
+### 3️⃣ Booking Workflow ⚠️ (Has Issues)
+
+```
+Select Seats Page
+├── Load booked seats dari DB
+├── User select kursi (click checkbox)
+├── Calculate total price
+└── Click "Lanjut ke Pembayaran"
+        ↓
+Checkout Page (Race Condition Risk! ⚠️)
+├── Check if seats still available
+├── Create Booking dengan status 'pending'
+├── Show checkout confirmation
+└── Click "Lanjut ke Pembayaran"
+        ↓
+Midtrans Payment Modal
+├── User select payment method
+├── Complete payment
+└── Midtrans callback ke server
+        ↓
+Payment Callback (Webhook)
+├── Verify signature
+├── Update booking.status = 'confirmed'
+└── Log transaction
+        ↓
+Success Page
+├── Show 3-second delay (wait untuk callback)
+├── Polling status setiap 2 second (60 attempts = 2 min)
+├── Display status: pending/confirmed/error
+└── Show booking code & ticket
+```
+
+**Issues Found:**
+
+1. ⚠️ **Race Condition**: 2 users bisa select & book kursi yang sama
+
+    - User A check kursi A10 tersedia ✓
+    - User B check kursi A10 tersedia ✓
+    - User A create booking kursi A10 ✓
+    - User B create booking kursi A10 ✓ ← OVERBOOKING!
+
+2. ⚠️ **Stale Seat Data**: Kursi yang ditampilkan bisa berubah saat user select
+
+    - Halaman load → tampil kursi A5 tersedia
+    - User lain booking kursi A5
+    - User masih lihat A5 tersedia
+    - User select A5 & checkout → Error: Kursi sudah dipesan
+
+3. ⚠️ **No Pre-Flight Validation**: Form submit tanpa check kursi terlebih dahulu
+    - User tunggu server response sebelum tahu ada error
+    - Bad UX
+
+### 4️⃣ View Tickets & Cancel
+
+```
+Tickets Page
+├── List all user bookings dengan status badge
+├── Filter by status (confirmed/pending/cancelled)
+└── Click "Cancel" untuk batalkan tiket
+        ↓
+Cancel Request
+├── Verify user ownership
+├── Update status → 'cancelled'
+└── Redirect with success message
+```
+
+### 5️⃣ Admin Management
+
+```
+Admin Dashboard
+├── View statistics (total booking, revenue, trends)
+├── Livewire modal CRUD untuk:
+│   ├── Film (create/edit/delete)
+│   ├── Jadwal (create/edit/delete)
+│   └── User (create/edit/delete)
+├── Manage bookings (approve/cancel/delete)
+└── View detailed reports
+```
+
+---
+
+## 🚀 Setup & Instalasi
+
+### Prerequisites
+
+-   PHP 8.2+
+-   Composer
+-   Node.js & NPM
+-   MySQL/MariaDB
+-   Laragon atau XAMPP
+
+### Step 1: Clone & Install Dependencies
+
+```bash
+cd c:\laragon\www
+git clone <repo-url> unema-laravel
+cd unema-laravel
+
+# Install PHP dependencies
+composer install
+
+# Install Node dependencies
+npm install
+```
+
+### Step 2: Setup Environment
+
+```bash
+# Copy environment file
+cp .env.example .env
+
+# Generate app key
+php artisan key:generate
+
+# Setup database credentials di .env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=unema_cinema
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Setup Midtrans keys (sandbox)
+MIDTRANS_SERVER_KEY=SB-Mid-server-xxxxx
+MIDTRANS_CLIENT_KEY=SB-Mid-client-xxxxx
+MIDTRANS_IS_PRODUCTION=false
+```
+
+### Step 3: Database Setup
+
+```bash
+# Create database
+mysql -u root -e "CREATE DATABASE unema_cinema CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+
+# Run migrations
+php artisan migrate
+
+# Seed dummy data (optional)
+php artisan db:seed
+```
+
+### Step 4: Build Assets
+
+```bash
+# Development
+npm run dev
+
+# Production
+npm run build
+```
+
+### Step 5: Run Development Server
+
+```bash
+# Terminal 1: PHP server
+php artisan serve
+
+# Terminal 2: Asset watcher (optional)
+npm run dev
+
+# Terminal 3: Queue listener (optional)
+php artisan queue:listen
+
+# Terminal 4: Log viewer (optional)
+php artisan pail
+```
+
+**Access:** `http://localhost:8000`
+
+### Test Account
+
+```
+Email: admin@unema.test
+Password: password123
+Role: admin
+
+Email: user@unema.test
+Password: password123
+Role: user
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Issue: "SQLSTATE[HY000] [1045] Access denied for user"
+
+**Solution:**
+
+```bash
+# Verify MySQL credentials di .env
+# Make sure MySQL service running
+# Test connection
+php artisan tinker
+>>> DB::connection()->getPdo()
+```
+
+### Issue: "Class not found: App\Models\User"
+
+**Solution:**
+
+```bash
+# Regenerate class loader
+composer dump-autoload
+
+# Or clear cache
+php artisan cache:clear
+php artisan config:clear
+```
+
+### Issue: "File permissions denied" (storage folder)
+
+**Solution:**
+
+```bash
+# Fix folder permissions
+chmod -R 775 storage bootstrap/cache
+```
+
+### Issue: Assets (CSS/JS) tidak load
+
+**Solution:**
+
+```bash
+# Rebuild assets
+npm run build
+
+# Or development watcher
+npm run dev
+
+# Make sure Vite configured correct
+```
+
+### Issue: Payment callback tidak diterima Midtrans
+
+**Solution:**
+
+```bash
+# Verify server key di .env correct
+# Check route /payment-callback accessible (public, no auth)
+# Test webhook di Midtrans dashboard
+# Check logs: storage/logs/laravel.log
+```
+
+### Issue: Booking stuck di "pending" setelah payment success
+
+**Solution (Implemented):**
+
+```
+✓ 3-second delay sebelum polling (wait untuk callback)
+✓ Polling 60 kali setiap 2 second (2 min timeout)
+✓ Client-side confirmPayment() fallback
+✓ Enhanced logging di paymentCallback()
+
+Jika masih pending:
+1. Check payment_callback route accessible
+2. Verify Midtrans webhook settings
+3. Check server logs untuk error
+4. Manually confirm payment via admin panel
+```
+
+### Issue: "Two users book same seat" (Race Condition)
+
+**Current Status:** ⚠️ UNRESOLVED
+
+**Recommended Fix:**
+
+```php
+// Use database transaction dengan lock
+DB::transaction(function () {
+    $showtime = Showtime::lockForUpdate()->findOrFail($showtimeId);
+
+    // Check & create dalam 1 transaction
+    $booked = Booking::where('showtime_id', $showtimeId)
+        ->whereIn('status', ['pending', 'confirmed'])
+        ->pluck('seats')
+        ->toArray();
+
+    // If available, create immediately
+    Booking::create([...]);
+}, attempts: 3);
+```
+
+**See:** LOGICAL_ERRORS_FOUND.md untuk detail issues
+
+---
+
+## 📞 Support & Maintenance
+
+### Monitoring
+
+-   Check logs: `storage/logs/laravel.log`
+-   Monitor payments: Midtrans Dashboard
+-   Database: phpMyAdmin atau MySQL GUI
+
+### Regular Maintenance
+
+```bash
+# Clear cache setiap deploy
+php artisan cache:clear
+php artisan config:clear
+
+# Optimize untuk production
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Monitor queue jobs
+php artisan queue:work
+
+# Backup database
+mysqldump -u root unema_cinema > backup.sql
+```
+
+### Useful Commands
+
+```bash
+# Generate new migration
+php artisan make:migration create_xxx_table
+
+# Create new controller
+php artisan make:controller XxxController --model=Xxx
+
+# Create new model
+php artisan make:model Xxx -m
+
+# Database reset (development only!)
+php artisan migrate:fresh --seed
+
+# Test
+php artisan test
+
+# Clear all
+php artisan tinker
+>>> Artisan::call('cache:clear');
+```
+
+---
+
+## 📝 License
+
+MIT License - UNEMA CINEMA 2024
+
+**Last Updated:** December 8, 2025
+**Documented By:** GitHub Copilot
+**Status:** ⚠️ 3 Logical Errors Found (See: LOGICAL_ERRORS_FOUND.md)
