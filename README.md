@@ -29,7 +29,7 @@
 -   ✅ Real-time seat availability tracking
 -   ✅ Sistem authentikasi & autorisasi
 
-**Stack Teknologi:** Laravel 11 + Livewire 3 + Bootstrap 5 + Midtrans Payment
+**Stack Teknologi:** Laravel 12 + Livewire 3 + Bootstrap 5 + Midtrans Payment
 
 ---
 
