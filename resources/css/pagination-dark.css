@@ -1,0 +1,27 @@
+/* Custom Pagination Styles for Dark Theme */
+.pagination .page-link {
+    background-color: var(--dark-blue);
+    border: 1px solid var(--light-blue);
+    color: var(--text-color);
+    margin: 0 3px;
+    border-radius: 0.3rem;
+    transition: all 0.2s ease-in-out;
+}
+.pagination .page-link:hover,
+.pagination .page-link:focus {
+    background-color: var(--medium-blue);
+    color: var(--primary-color-light);
+    border-color: var(--primary-color-light);
+    box-shadow: none;
+}
+.pagination .page-item.active .page-link {
+    background-color: var(--primary-color-light);
+    border-color: var(--primary-color-light);
+    color: var(--dark-blue);
+    font-weight: bold;
+    z-index: 1;
+}
+/* Style for pagination summary text */
+.pagination-container .text-muted {
+    color: var(--text-muted) !important;
+}
