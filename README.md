@@ -145,12 +145,12 @@ unema-laravel/
 ```sql
 CREATE TABLE users (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    name VARCHAR(255) NOT NULL,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
-    phone VARCHAR(20),
-    role ENUM('user', 'admin') DEFAULT 'user',
-    is_active BOOLEAN DEFAULT true,
+    full_name VARCHAR(255),
+    phone VARCHAR(255),
+    is_admin TINYINT(1) NOT NULL DEFAULT 0,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -165,11 +165,11 @@ CREATE TABLE movies (
     description LONGTEXT,
     poster_url VARCHAR(255),
     trailer_url VARCHAR(255),
-    duration INT (minutes),
-    rating DECIMAL(2, 1) (e.g., 8.5),
+    duration INT,
+    rating DECIMAL(2, 1),
     release_date DATE,
-    genre VARCHAR(100),
-    status ENUM('showing', 'coming_soon', 'ended') DEFAULT 'showing',
+    genre VARCHAR(255),
+    status ENUM('now_showing', 'coming_soon') DEFAULT 'now_showing',
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -181,10 +181,12 @@ CREATE TABLE movies (
 CREATE TABLE showtimes (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     movie_id BIGINT FOREIGN KEY,
-    studio VARCHAR(50),
-    show_date DATE,
-    show_time TIME,
-    price DECIMAL(10, 2),
+    show_date DATE NOT NULL,
+    show_time TIME NOT NULL,
+    studio VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    available_seats INT NOT NULL DEFAULT 0,
+    total_seats INT NOT NULL DEFAULT 50,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -197,9 +199,9 @@ CREATE TABLE bookings (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT FOREIGN KEY,
     showtime_id BIGINT FOREIGN KEY,
-    seats VARCHAR(255) (comma-separated, e.g., "A1,A2,B3"),
-    total_price DECIMAL(10, 2),
-    booking_code VARCHAR(50) UNIQUE,
+    seats VARCHAR(255) NOT NULL,
+    total_price DECIMAL(10, 2) NOT NULL,
+    booking_code VARCHAR(255) UNIQUE NOT NULL,
     status ENUM('pending', 'confirmed', 'cancelled') DEFAULT 'pending',
     created_at TIMESTAMP,
     updated_at TIMESTAMP
@@ -211,9 +213,9 @@ CREATE TABLE bookings (
 ```sql
 CREATE TABLE reviews (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    user_id BIGINT FOREIGN KEY,
     movie_id BIGINT FOREIGN KEY,
-    rating INT (1-5),
+    user_id BIGINT FOREIGN KEY,
+    rating INT NOT NULL,
     comment TEXT,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
